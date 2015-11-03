@@ -28,18 +28,23 @@ public class PrintController {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response postImage(Img img) {
+
+		try {
+			Print p = new Print();
+			p.print(img);
+		} catch (Exception e) {
+			return Response.status(400).entity(e.getStackTrace()).build();
+		}
+
 		String result = "Printed with success!";
-		return Response.status(200).entity(img).build();
+		return Response.status(200).entity(result).build();
 	}
 
 	@POST
 	@Path("/pdf")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public Response postPdf(String s) {
-		Pdf pdf = new Pdf(false, true, 1l, "");
-
+	public Response postPdf(Pdf pdf) {
 		try {
-			pdf.setByteOfObj(s.getBytes());
 			Print p = new Print();
 			p.print(pdf);
 		} catch (Exception e) {
