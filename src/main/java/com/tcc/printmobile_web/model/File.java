@@ -8,6 +8,7 @@ public class File implements Serializable {
 	private Boolean colorful;
 	private Boolean landscape;
 	private byte[] byteOfObj;
+	private String byteBase64;
 	private Long copies;
 
 	public File() {
@@ -57,5 +58,13 @@ public class File implements Serializable {
 	public String toString() {
 		return "colorful: '" + getColorful() + "', landscape: '"
 				+ getLandscape() + "', copies: '" + getCopies() + "'";
+	}
+
+	public String getByteBase64() {
+		return byteBase64;
+	}
+
+	public void setByteBase64(String byteBase64) {
+		this.byteBase64 = byteBase64;
 	}
 }

@@ -19,6 +19,7 @@ public class PrintController {
 	@GET
 	@Path("/health/{param}")
 	public Response getHealth(@PathParam("param") String msg) {
+		System.out.println("teste");
 		String output = "Live long and prosper : " + msg;
 		return Response.status(200).entity(output).build();
 	}

@@ -1,6 +1,7 @@
 package com.tcc.printmobile_web.service;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -19,6 +20,7 @@ import javax.print.attribute.standard.MediaSizeName;
 import javax.print.attribute.standard.OrientationRequested;
 import javax.print.attribute.standard.PageRanges;
 
+import com.sun.jersey.core.util.Base64;
 import com.tcc.printmobile_web.model.File;
 import com.tcc.printmobile_web.model.Pdf;
 
@@ -30,7 +32,8 @@ public class Print {
 		if (file instanceof Pdf)
 			pdf = (Pdf) file;
 
-		InputStream prin = new ByteArrayInputStream(file.getByteOfObj());
+		InputStream prin = new ByteArrayInputStream(Base64.decode(file
+				.getByteBase64()));
 		DocFlavor docFlavor = DocFlavor.INPUT_STREAM.AUTOSENSE;
 		SimpleDoc documentoTexto = new SimpleDoc(prin, docFlavor, null);
 		PrintService impressora = PrintServiceLookup
@@ -72,6 +75,29 @@ public class Print {
 																// imprimir
 
 		prin.close();
+	}
+
+	private byte[] convertByte(java.io.File f) {
+		FileInputStream fileInputStream = null;
+
+		byte[] bFile = new byte[(int) f.length()];
+
+		try {
+			// convert file into array of bytes
+			fileInputStream = new FileInputStream(f);
+			fileInputStream.read(bFile);
+			fileInputStream.close();
+
+			for (int i = 0; i < bFile.length; i++) {
+				System.out.print((char) bFile[i]);
+			}
+
+			System.out.println("Done");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return bFile;
 	}
 
 }
