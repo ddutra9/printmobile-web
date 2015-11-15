@@ -49,8 +49,10 @@ public class Print {
 			ImageIO.write(imag, "jpg", baos);
 
 			prin = new ByteArrayInputStream(baos.toByteArray());
-		} else
+		} else {
 			prin = new ByteArrayInputStream(bytearray);
+
+		}
 
 		DocFlavor docFlavor = DocFlavor.INPUT_STREAM.AUTOSENSE;
 		SimpleDoc documentoTexto = new SimpleDoc(prin, docFlavor, null);
@@ -59,10 +61,10 @@ public class Print {
 		PrintRequestAttributeSet printerAttributes = new HashPrintRequestAttributeSet();
 		printerAttributes.add(new JobName("Impressao", null));
 
-		if (!file.getLandscape())
-			printerAttributes.add(OrientationRequested.PORTRAIT);
-		else
+		if (file.getLandscape())
 			printerAttributes.add(OrientationRequested.LANDSCAPE);
+		else
+			printerAttributes.add(OrientationRequested.PORTRAIT);
 
 		if (file.getColorful())
 			printerAttributes.add(Chromaticity.COLOR);
@@ -75,12 +77,14 @@ public class Print {
 				String[] pageRange = pdf.getIntervalPage().split("-");
 				startPage = Integer.parseInt(pageRange[0]);
 				endPage = Integer.parseInt(pageRange[1]);
-			} else {
-				startPage = Integer.parseInt(pdf.getIntervalPage());
-				endPage = startPage;
-			}
 
-			printerAttributes.add(new PageRanges(startPage, endPage));
+				printerAttributes.add(new PageRanges(startPage, endPage));
+			}
+			// else {
+			// startPage = Integer.parseInt(pdf.getIntervalPage());
+			// endPage = startPage;
+			// }
+			//
 		}
 
 		printerAttributes.add(new Copies(file.getCopies().intValue()));
