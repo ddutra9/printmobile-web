@@ -19,20 +19,14 @@ import javax.print.attribute.standard.Copies;
 import javax.print.attribute.standard.JobName;
 import javax.print.attribute.standard.MediaSizeName;
 import javax.print.attribute.standard.OrientationRequested;
-import javax.print.attribute.standard.PageRanges;
 
 import com.sun.jersey.core.util.Base64;
 import com.tcc.printmobile_web.model.File;
 import com.tcc.printmobile_web.model.Img;
-import com.tcc.printmobile_web.model.Pdf;
 
 public class Print {
 
 	public void print(File file) throws PrintException, IOException {
-
-		Pdf pdf = null;
-		if (file instanceof Pdf)
-			pdf = (Pdf) file;
 
 		byte[] bytearray = Base64.decode(file.getByteBase64());
 
@@ -47,10 +41,8 @@ public class Print {
 			ImageIO.write(imag, "jpg", baos);
 
 			prin = new ByteArrayInputStream(baos.toByteArray());
-		} else {
+		} else
 			prin = new ByteArrayInputStream(bytearray);
-
-		}
 
 		DocFlavor docFlavor = DocFlavor.INPUT_STREAM.AUTOSENSE;
 		SimpleDoc documentoTexto = new SimpleDoc(prin, docFlavor, null);
@@ -64,22 +56,6 @@ public class Print {
 		else
 			printerAttributes.add(OrientationRequested.PORTRAIT);
 
-		if (pdf != null && !pdf.getIntervalPage().isEmpty()) {
-			int startPage = 0, endPage = 0;
-			if (pdf.getIntervalPage().contains("-")) {
-				String[] pageRange = pdf.getIntervalPage().split("-");
-				startPage = Integer.parseInt(pageRange[0]);
-				endPage = Integer.parseInt(pageRange[1]);
-
-				printerAttributes.add(new PageRanges(startPage, endPage));
-			}
-			// else {
-			// startPage = Integer.parseInt(pdf.getIntervalPage());
-			// endPage = startPage;
-			// }
-			//
-		}
-
 		printerAttributes.add(new Copies(file.getCopies().intValue()));
 		printerAttributes.add(MediaSizeName.ISO_A4); // informa o tipo de
 														// folha
@@ -88,7 +64,6 @@ public class Print {
 		printJob.print(documentoTexto,
 				(PrintRequestAttributeSet) printerAttributes); // tenta
 																// imprimir
-
 		prin.close();
 	}
 }
