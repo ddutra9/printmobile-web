@@ -3,7 +3,6 @@ package com.tcc.printmobile_web.service;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -16,7 +15,6 @@ import javax.print.PrintServiceLookup;
 import javax.print.SimpleDoc;
 import javax.print.attribute.HashPrintRequestAttributeSet;
 import javax.print.attribute.PrintRequestAttributeSet;
-import javax.print.attribute.standard.Chromaticity;
 import javax.print.attribute.standard.Copies;
 import javax.print.attribute.standard.JobName;
 import javax.print.attribute.standard.MediaSizeName;
@@ -66,11 +64,6 @@ public class Print {
 		else
 			printerAttributes.add(OrientationRequested.PORTRAIT);
 
-		if (file.getColorful())
-			printerAttributes.add(Chromaticity.COLOR);
-		else
-			printerAttributes.add(Chromaticity.MONOCHROME);
-
 		if (pdf != null && !pdf.getIntervalPage().isEmpty()) {
 			int startPage = 0, endPage = 0;
 			if (pdf.getIntervalPage().contains("-")) {
@@ -98,28 +91,4 @@ public class Print {
 
 		prin.close();
 	}
-
-	private byte[] convertByte(java.io.File f) {
-		FileInputStream fileInputStream = null;
-
-		byte[] bFile = new byte[(int) f.length()];
-
-		try {
-			// convert file into array of bytes
-			fileInputStream = new FileInputStream(f);
-			fileInputStream.read(bFile);
-			fileInputStream.close();
-
-			for (int i = 0; i < bFile.length; i++) {
-				System.out.print((char) bFile[i]);
-			}
-
-			System.out.println("Done");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		return bFile;
-	}
-
 }

@@ -47,7 +47,9 @@ public class PrintController {
 	public Response postPdf(Pdf pdf) {
 		try {
 			Print p = new Print();
-			p.print(pdf);
+			for (int i = 0; i < pdf.getCopies(); i++) {
+				p.print(pdf);
+			}
 		} catch (Exception e) {
 			return Response.status(400).entity(e.getStackTrace()).build();
 		}
